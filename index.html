@@ -1,0 +1,2322 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRIV | Hecho para destacar</title>
+    
+    <!-- Importación de Rockwell desde Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Rockwell:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --gold-primary: #d4af37;
+            --gold-bright: #ffd700;
+            --gold-old: #aa8c2c;
+            --gold-glow: rgba(212, 175, 55, 0.35);
+            
+            --bg-intro: #030303;
+            --bg-hero: #050507; 
+            --bg-nosotros: #0c0b09; 
+            --bg-priverse: #080a0f; 
+            --bg-colecciones: #0e0d0d; 
+            --bg-portafolio: #09090b; 
+            
+            --bg-ventas-1: #0a0805; 
+            --bg-ventas-2: #05080e; 
+            --bg-ventas-3: #0c0c0c; 
+
+            --bg-contacto-start: #141108; 
+            --bg-contacto-end: #050505;
+            --bg-footer: #020202;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg-hero);
+            color: white;
+            font-family: 'Rockwell', 'Helvetica Neue', Arial, sans-serif;
+            overflow-x: hidden;
+        }
+
+        img {
+            max-width: 100%;
+        }
+
+        /* INTRO LOADER */
+        .intro {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: var(--bg-intro);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            animation: introSalida 1.2s ease 4s forwards;
+            pointer-events: none;
+        }
+
+        .intro-glow {
+            position: absolute;
+            width: 380px;
+            height: 380px;
+            background: radial-gradient(circle, var(--gold-glow), transparent 70%);
+            filter: blur(35px);
+            animation: glow 2.5s ease-in-out infinite;
+        }
+
+        .intro-logo {
+            position: fixed;
+            z-index: 2;
+            width: 400px;
+            height: auto;
+            object-fit: contain;
+            opacity: 0;
+            animation: logoEntrada 1.5s cubic-bezier(.16,1,.3,1) .4s forwards, glitch .15s linear 2.1s 3;
+        }
+
+        .intro-line {
+            width: 0px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
+            margin-top: 35%;
+            position: fixed;
+            animation: lineaEntrada 1s ease 1.8s forwards;
+        }
+
+        .intro-text {
+            color: #ffffff;
+            font-size: 15px;
+            letter-spacing: 6px;
+            margin-top: 32%;
+            opacity: 0;
+            position: fixed;
+            animation: textoEntrada 1s ease 2.1s forwards;
+            font-family: 'Rockwell', serif;
+        }
+
+        /* NAVEGACIÓN */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 75px;
+            z-index: 5000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 45px;
+            background: rgba(5, 5, 5, 0.9);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.8);
+        }
+
+        .priv-nav-logo {
+            width: 160px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            flex-shrink: 0;
+            text-decoration: none;
+            background: none;
+            border: none;
+        }
+
+        .priv-nav-logo img {
+            width: 120px;
+            height: auto;
+            object-fit: contain;
+            display: block;
+            transition: .3s ease;
+        }
+
+        .priv-nav-logo:hover img {
+            transform: scale(1.08);
+            filter: drop-shadow(0 0 10px var(--gold-primary));
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            list-style: none;
+        }
+
+        /* Botón hamburguesa (solo visible en móvil) */
+        .hamburguesa {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            width: 46px;
+            height: 46px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid var(--gold-primary);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .hamburguesa span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--gold-primary);
+            border-radius: 2px;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .hamburguesa.abierto span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .hamburguesa.abierto span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburguesa.abierto span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        .nav-links a {
+            color: #e0e0e0;
+            text-decoration: none;
+            font-size: 11px;
+            letter-spacing: 2px;
+            font-weight: 600;
+            transition: .3s ease;
+            position: relative;
+            padding: 5px 0;
+            font-family: 'Rockwell', serif;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gold-primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold-primary);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* HERO */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            padding: 120px 20px 60px;
+            background: linear-gradient(180deg, #030303 0%, var(--bg-hero) 100%);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+        }
+
+        .hero-logo, .hero h1, .hero p {
+            position: relative;
+            z-index: 3;
+        }
+
+        .hero-logo {
+            width: 400px;
+            height: auto;
+            margin-bottom: 20px;
+            transition: transform 0.4s ease, filter 0.4s ease;
+            filter: drop-shadow(0 0 15px rgba(0,0,0,0.8));
+        }
+
+        .hero-logo:hover {
+            transform: translateY(-8px) scale(1.02);
+            filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.7));
+        }
+
+        .hero h1 {
+            font-size: clamp(40px, 6vw, 90px);
+            letter-spacing: 1px;
+            font-weight: 700;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.9);
+            font-family: 'Rockwell', serif;
+        }
+
+        .hero h1 span {
+            color: var(--gold-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: var(--gold-primary);
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+        }
+
+        .hero p {
+            margin-top: 10px;
+            color: var(--gold-primary);
+            letter-spacing: 1px;
+            font-size: 15px;
+            font-weight: 700;
+            font-family: 'Rockwell', serif;
+        }
+
+        /* GENERALES */
+        .section {
+            padding: 120px 8%;
+            max-width: 1400px;
+            margin: auto;
+            position: relative;
+        }
+
+        .titulo {
+            text-align: center;
+            color: var(--gold-primary);
+            font-size: clamp(35px, 5vw, 60px);
+            letter-spacing: 6px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            font-weight: 700;
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+            font-family: 'Rockwell', serif;
+        }
+
+        .subtitulo {
+            text-align: center;
+            color: #a0a0a0;
+            margin-bottom: 70px;
+            letter-spacing: 3px;
+            font-size: 12px;
+            text-transform: uppercase;
+            font-family: 'Rockwell', serif;
+        }
+
+        /* NOSOTROS & CARRUSEL */
+        #nosotros-wrapper {
+            background: linear-gradient(135deg, var(--bg-nosotros) 0%, #050505 100%);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.12);
+            box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.8);
+        }
+
+        .nosotros {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .nosotros-logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nosotros-logo img {
+            width: 280px;
+            height: auto;
+            transition: transform 0.4s ease, filter 0.4s ease;
+        }
+
+        .nosotros-logo:hover img {
+            transform: scale(1.08) translateY(-5px);
+            filter: drop-shadow(0 0 25px rgba(212,175,55,0.7));
+        }
+
+        /* CARRUSEL */
+        .carrusel-container {
+            background: rgba(20, 20, 25, 0.6);
+            padding: 40px;
+            border-left: 3px solid var(--gold-primary);
+            border-radius: 0 12px 12px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .carrusel-track {
+            position: relative;
+            width: 100%;
+            min-height: 280px;
+        }
+
+        .carrusel-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+            box-sizing: border-box;
+        }
+
+        .carrusel-slide.active {
+            opacity: 1;
+            visibility: visible;
+            position: relative;
+        }
+
+        .carrusel-slide span {
+            color: var(--gold-primary);
+            letter-spacing: 4px;
+            font-size: 12px;
+            font-weight: 700;
+            font-family: 'Rockwell', serif;
+        }
+
+        .carrusel-slide h2 {
+            font-size: 36px;
+            margin: 15px 0 20px;
+            color: #ffffff;
+            letter-spacing: 2px;
+            font-family: 'Rockwell', serif;
+        }
+
+        .carrusel-slide p {
+            color: #cccccc;
+            line-height: 1.8;
+            font-size: 15px;
+            margin-bottom: 15px;
+        }
+
+        .carrusel-controles {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+        }
+
+        .carrusel-btn {
+            background: rgba(0, 0, 0, 0.85);
+            border: 2px solid var(--gold-primary);
+            color: var(--gold-primary);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 28px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+            line-height: 1;
+            font-family: 'Rockwell', serif;
+        }
+
+        .carrusel-btn:hover {
+            background: var(--gold-primary);
+            color: #000000;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.7);
+            transform: scale(1.1);
+        }
+
+        .carrusel-dots {
+            display: flex;
+            gap: 12px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        .dot.active {
+            background: var(--gold-primary);
+            box-shadow: 0 0 10px var(--gold-primary);
+        }
+
+        /* PRIVERSE */
+        #priverse-wrapper {
+            background: linear-gradient(180deg, var(--bg-priverse) 0%, #050507 100%);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.12);
+        }
+
+        .memes-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .meme-card {
+            background: #121216;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            transition: all 0.4s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.6);
+        }
+
+        .meme-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--gold-primary);
+            box-shadow: 0 15px 30px rgba(212, 175, 55, 0.25);
+        }
+
+        .meme-card img {
+            width: 100%;
+            height: 320px;
+            object-fit: cover;
+            display: block;
+            filter: brightness(0.9);
+            transition: filter 0.4s ease;
+        }
+
+        .meme-card:hover img {
+            filter: brightness(1.05);
+        }
+
+        .meme-info {
+            padding: 22px;
+            background: linear-gradient(180deg, #121216 0%, #08080a 100%);
+        }
+
+        .meme-info span {
+            color: var(--gold-primary);
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 700;
+            font-family: 'Rockwell', serif;
+        }
+
+        .meme-info h3 {
+            margin-top: 10px;
+            font-size: 19px;
+            color: #ffffff;
+            font-family: 'Rockwell', serif;
+        }
+
+        /* COLECCIONES */
+        #colecciones-wrapper {
+            background: linear-gradient(135deg, var(--bg-colecciones) 0%, #08080a 100%);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.12);
+        }
+
+        .colecciones {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .coleccion {
+            position: relative;
+            overflow: hidden;
+            height: 520px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.7);
+            background: transparent;
+            border: none;
+            text-align: left;
+            width: 100%;
+        }
+
+        .coleccion img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.7s ease, filter 0.7s ease;
+            display: block;
+        }
+
+        .coleccion:hover img {
+            transform: scale(1.1);
+            filter: brightness(1.1);
+        }
+
+        .coleccion-texto {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 35px 25px;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.7) 40%, rgba(5, 5, 5, 0.98) 100%);
+            border-top: 1px solid rgba(212, 175, 55, 0.15);
+            transition: all 0.4s ease;
+        }
+
+        .coleccion:hover .coleccion-texto {
+            background: linear-gradient(transparent, rgba(20, 16, 5, 0.8) 30%, rgba(10, 10, 10, 0.98) 100%);
+            border-top-color: var(--gold-primary);
+        }
+
+        .coleccion-texto h3 {
+            font-size: 26px;
+            color: #ffffff;
+            letter-spacing: 3px;
+            transition: color 0.3s ease;
+            font-family: 'Rockwell', serif;
+        }
+
+        .coleccion:hover .coleccion-texto h3 {
+            color: var(--gold-primary);
+        }
+
+        /* --- PORTAFOLIO DE VENTAS DINÁMICO --- */
+        #vista-ventas {
+            display: none;
+            min-height: 100vh;
+            padding: 140px 8% 80px;
+            transition: background 0.5s ease;
+        }
+
+        .ventas-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 50px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            padding-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .btn-volver {
+            background: rgba(0,0,0,0.6);
+            border: 2px solid var(--gold-primary);
+            color: var(--gold-primary);
+            padding: 12px 25px;
+            border-radius: 4px;
+            font-size: 11px;
+            letter-spacing: 2px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Rockwell', serif;
+            cursor: pointer;
+        }
+
+        .btn-volver:hover {
+            background: var(--gold-primary);
+            color: #000;
+            box-shadow: 0 0 20px rgba(212,175,55,0.6);
+        }
+
+        .ventas-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .producto-venta-card {
+            background: rgba(15, 15, 20, 0.85);
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            transition: transform 0.4s ease, border-color 0.4s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .producto-venta-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--gold-primary);
+            box-shadow: 0 15px 35px rgba(212, 175, 55, 0.3);
+        }
+
+        .producto-venta-card img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .producto-venta-info {
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: space-between;
+        }
+
+        .producto-venta-info span {
+            color: var(--gold-primary);
+            font-size: 11px;
+            letter-spacing: 3px;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-family: 'Rockwell', serif;
+        }
+
+        .producto-venta-info h3 {
+            font-size: 20px;
+            color: #fff;
+            margin: 8px 0 10px;
+            letter-spacing: 1px;
+            font-family: 'Rockwell', serif;
+        }
+
+        .producto-desc {
+            color: #b0b0b0;
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .producto-precio {
+            font-size: 18px;
+            color: var(--gold-bright);
+            font-weight: 700;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+            font-family: 'Rockwell', serif;
+        }
+
+        .btn-comprar {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 12px;
+            background: var(--gold-primary);
+            color: #000;
+            text-decoration: none;
+            font-weight: 700;
+            letter-spacing: 2px;
+            font-size: 11px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            font-family: 'Rockwell', serif;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-comprar:hover {
+            background: #fff;
+            box-shadow: 0 0 20px rgba(255,255,255,0.7);
+        }
+
+        /* Botón secundario (contorno dorado) */
+        .btn-secundario {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 11px;
+            background: transparent;
+            color: var(--gold-primary);
+            text-decoration: none;
+            font-weight: 700;
+            letter-spacing: 2px;
+            font-size: 11px;
+            border-radius: 4px;
+            border: 2px solid var(--gold-primary);
+            transition: all 0.3s ease;
+            font-family: 'Rockwell', serif;
+            cursor: pointer;
+        }
+
+        .btn-secundario:hover {
+            background: var(--gold-primary);
+            color: #000;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+        }
+
+        .acciones-card {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* PORTAFOLIO (LOS FAVORITOS) */
+        #Los Favoritos-wrapper {
+            background: linear-gradient(180deg, var(--bg-portafolio) 0%, #030303 100%);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.12);
+        }
+
+        .portafolio {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 35px;
+        }
+
+        .portafolio .producto-venta-card img {
+            height: 380px;
+        }
+
+        .proyecto {
+            overflow: hidden;
+            background: #0f0f13;
+            border-radius: 12px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            transition: border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .proyecto:hover {
+            border-color: var(--gold-primary);
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.3);
+        }
+
+        .proyecto img {
+            width: 100%;
+            height: 380px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.6s ease;
+        }
+
+        .proyecto:hover img {
+            transform: scale(1.06);
+        }
+
+        /* --- VENTANAS FLOTANTES (MODALS) --- */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: #0e0e12;
+            border: 2px solid var(--gold-primary);
+            border-radius: 14px;
+            max-width: 850px;
+            width: 100%;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(212, 175, 55, 0.25);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-img-box img {
+            width: 100%;
+            height: 100%;
+            min-height: 380px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .modal-info-box {
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .modal-info-box span {
+            color: var(--gold-primary);
+            font-size: 11px;
+            letter-spacing: 3px;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-family: 'Rockwell', serif;
+        }
+
+        .modal-info-box h3 {
+            font-size: 22px;
+            color: #fff;
+            margin: 8px 0 10px;
+            font-family: 'Rockwell', serif;
+            letter-spacing: 1px;
+        }
+
+        .modal-info-box p {
+            color: #b0b0b0;
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        /* Selector de Métodos de Pago */
+        .pago-selector {
+            margin-bottom: 15px;
+        }
+
+        .pago-selector label {
+            display: block;
+            color: var(--gold-primary);
+            font-size: 11px;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+            font-family: 'Rockwell', serif;
+        }
+
+        .pago-selector select {
+            width: 100%;
+            padding: 10px;
+            background: #1a1a24;
+            border: 1px solid var(--gold-primary);
+            color: #fff;
+            border-radius: 4px;
+            font-family: 'Rockwell', serif;
+            font-size: 12px;
+        }
+
+        .modal-cerrar {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: transparent;
+            border: none;
+            color: var(--gold-primary);
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 10;
+            transition: transform 0.3s ease;
+        }
+
+        .modal-cerrar:hover {
+            transform: scale(1.2);
+            color: #fff;
+        }
+
+        /* CONTACTO Y REDES SOCIALES */
+        #contacto-wrapper {
+            background: linear-gradient(135deg, var(--bg-contacto-start) 0%, var(--bg-contacto-end) 100%);
+            position: relative;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+        }
+
+        .contacto {
+            text-align: center;
+            padding: 140px 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .contacto h2 {
+            font-size: clamp(40px, 7vw, 90px);
+            letter-spacing: 8px;
+            font-weight: 700;
+            color: #ffffff;
+            font-family: 'Rockwell', serif;
+        }
+
+        .contacto h2 span {
+            color: var(--gold-primary);
+            background: linear-gradient(180deg, #fff 0%, var(--gold-primary) 60%, var(--gold-old) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .contacto p {
+            margin: 30px auto 40px;
+            color: #d0d0d0;
+            max-width: 650px;
+            line-height: 1.6;
+            font-size: 16px;
+            letter-spacing: 1px;
+        }
+
+        .redes-sociales {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 50px;
+            margin-bottom: 40px;
+        }
+
+        .red-card {
+            background: transparent !important;
+            border: 1px solid transparent;
+            border-radius: 12px;
+            padding: 30px 20px;
+            text-decoration: none;
+            transition: all 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .red-card:hover {
+            transform: translateY(-8px);
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
+
+        .red-icon-box {
+            width: 70px;
+            height: 70px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .red-icon-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.4));
+            transition: transform 0.3s ease;
+        }
+
+        .red-card:hover .red-icon-box img {
+            transform: scale(1.15);
+        }
+
+        .red-card h3 {
+            color: #ffffff;
+            font-size: 16px;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+            font-family: 'Rockwell', serif;
+        }
+
+        .red-card span {
+            color: var(--gold-primary);
+            font-size: 11px;
+            letter-spacing: 1px;
+            font-family: 'Rockwell', serif;
+        }
+
+        .boton {
+            display: inline-block;
+            padding: 18px 45px;
+            border: 2px solid var(--gold-primary);
+            color: var(--gold-primary);
+            text-decoration: none;
+            letter-spacing: 4px;
+            font-size: 12px;
+            font-weight: 700;
+            background: rgba(0,0,0,0.4);
+            border-radius: 4px;
+            transition: all 0.4s ease;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+            font-family: 'Rockwell', serif;
+        }
+
+        .boton:hover {
+            background: var(--gold-primary);
+            color: #000000;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.7);
+            transform: translateY(-3px);
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 45px 20px;
+            background-color: var(--bg-footer);
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            color: #888888;
+            font-size: 11px;
+            letter-spacing: 3px;
+            font-family: 'Rockwell', serif;
+        }
+
+        /* =========================================
+           CARRITO DE COMPRAS
+           ========================================= */
+        .carrito-flotante {
+            position: fixed;
+            right: 25px;
+            bottom: 25px;
+            width: 62px;
+            height: 62px;
+            border-radius: 50%;
+            background: var(--gold-primary);
+            border: 2px solid #000;
+            color: #000;
+            cursor: pointer;
+            z-index: 6000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.55), 0 6px 20px rgba(0,0,0,0.7);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .carrito-flotante:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.9), 0 6px 20px rgba(0,0,0,0.7);
+        }
+
+        .carrito-flotante svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        .carrito-flotante.rebote {
+            animation: rebote 0.45s ease;
+        }
+
+        .carrito-contador {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            min-width: 24px;
+            height: 24px;
+            padding: 0 6px;
+            border-radius: 12px;
+            background: #fff;
+            color: #000;
+            font-size: 12px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--gold-primary);
+            font-family: 'Rockwell', serif;
+        }
+
+        .carrito-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 100000;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .carrito-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .carrito-panel {
+            position: fixed;
+            top: 0;
+            right: 0;
+            height: 100%;
+            width: 440px;
+            max-width: 100%;
+            background: #0b0b0f;
+            border-left: 2px solid var(--gold-primary);
+            box-shadow: -15px 0 40px rgba(212, 175, 55, 0.2);
+            z-index: 100001;
+            display: flex;
+            flex-direction: column;
+            transform: translateX(105%);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .carrito-panel.active {
+            transform: translateX(0);
+        }
+
+        .carrito-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 25px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+        }
+
+        .carrito-header h2 {
+            color: var(--gold-primary);
+            letter-spacing: 4px;
+            font-size: 20px;
+            font-family: 'Rockwell', serif;
+        }
+
+        .carrito-header button {
+            background: transparent;
+            border: none;
+            color: var(--gold-primary);
+            font-size: 30px;
+            cursor: pointer;
+            line-height: 1;
+            transition: transform 0.3s ease;
+        }
+
+        .carrito-header button:hover {
+            transform: scale(1.2);
+            color: #fff;
+        }
+
+        .carrito-items {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px 25px;
+        }
+
+        .carrito-vacio {
+            text-align: center;
+            color: #888;
+            margin-top: 80px;
+            letter-spacing: 1px;
+            line-height: 1.8;
+            font-size: 14px;
+        }
+
+        .carrito-item {
+            display: grid;
+            grid-template-columns: 72px 1fr auto;
+            gap: 14px;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .carrito-item img {
+            width: 72px;
+            height: 88px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .carrito-item-info h4 {
+            font-size: 14px;
+            color: #fff;
+            letter-spacing: 1px;
+            margin-bottom: 3px;
+            font-family: 'Rockwell', serif;
+        }
+
+        .carrito-item-info small {
+            color: #888;
+            font-size: 10px;
+            letter-spacing: 2px;
+        }
+
+        .carrito-item-precio {
+            color: var(--gold-bright);
+            font-size: 13px;
+            font-weight: 700;
+            margin: 6px 0;
+            font-family: 'Rockwell', serif;
+        }
+
+        .carrito-cantidad {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid rgba(212, 175, 55, 0.5);
+            border-radius: 4px;
+            padding: 2px 6px;
+        }
+
+        .carrito-cantidad button {
+            background: transparent;
+            border: none;
+            color: var(--gold-primary);
+            font-size: 18px;
+            cursor: pointer;
+            width: 22px;
+            height: 24px;
+            line-height: 1;
+            font-family: 'Rockwell', serif;
+        }
+
+        .carrito-cantidad button:hover {
+            color: #fff;
+        }
+
+        .carrito-cantidad span {
+            font-size: 13px;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        .carrito-quitar {
+            background: transparent;
+            border: none;
+            color: #777;
+            font-size: 22px;
+            cursor: pointer;
+            align-self: start;
+            transition: color 0.3s ease;
+        }
+
+        .carrito-quitar:hover {
+            color: #ff5555;
+        }
+
+        .carrito-footer {
+            padding: 20px 25px 25px;
+            border-top: 1px solid rgba(212, 175, 55, 0.25);
+            background: #08080b;
+        }
+
+        .carrito-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            font-family: 'Rockwell', serif;
+        }
+
+        .carrito-total span {
+            color: #bbb;
+            letter-spacing: 3px;
+            font-size: 12px;
+        }
+
+        .carrito-total strong {
+            color: var(--gold-bright);
+            font-size: 22px;
+            letter-spacing: 1px;
+        }
+
+        .carrito-footer .acciones-card {
+            margin-top: 12px;
+        }
+
+        .btn-vaciar {
+            background: transparent;
+            border: none;
+            color: #888;
+            font-size: 11px;
+            letter-spacing: 2px;
+            cursor: pointer;
+            margin-top: 12px;
+            width: 100%;
+            font-family: 'Rockwell', serif;
+            text-decoration: underline;
+        }
+
+        .btn-vaciar:hover {
+            color: #ff5555;
+        }
+
+        .carrito-nota {
+            color: #777;
+            font-size: 11px;
+            line-height: 1.5;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        /* Notificación (toast) */
+        .toast-carrito {
+            position: fixed;
+            left: 50%;
+            bottom: 30px;
+            transform: translate(-50%, 30px);
+            background: #0e0e12;
+            border: 1px solid var(--gold-primary);
+            color: #fff;
+            padding: 14px 24px;
+            border-radius: 8px;
+            letter-spacing: 1px;
+            font-size: 13px;
+            z-index: 100002;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.35s ease;
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+            font-family: 'Rockwell', serif;
+            max-width: 90%;
+            text-align: center;
+        }
+
+        .toast-carrito.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, 0);
+        }
+
+        .toast-carrito b {
+            color: var(--gold-primary);
+        }
+
+        /* ANIMACIONES */
+        @keyframes logoEntrada {
+            0% { opacity: 0; transform: scale(.5); filter: blur(15px); }
+            60% { opacity: 1; transform: scale(1.08); filter: blur(0); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes glow {
+            0%, 100% { transform: scale(.8); opacity: .4; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+
+        @keyframes lineaEntrada {
+            to { width: 160px; }
+        }
+
+        @keyframes textoEntrada {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            25% { transform: translate(-3px,2px); }
+            50% { transform: translate(3px,-2px); }
+            75% { transform: translate(-2px,-1px); }
+            100% { transform: translate(0); }
+        }
+
+        @keyframes introSalida {
+            0% { opacity: 1; visibility: visible; }
+            99% { opacity: 0; visibility: visible; }
+            100% { opacity: 0; visibility: hidden; display: none; }
+        }
+
+        @keyframes rebote {
+            0%, 100% { transform: scale(1); }
+            40% { transform: scale(1.25); }
+            70% { transform: scale(0.95); }
+        }
+
+        /* --- RESPONSIVE OPTIMIZADO PARA MÓVILES --- */
+        @media(max-width:900px) {
+            html {
+                scroll-padding-top: 80px;
+            }
+
+            nav {
+                padding: 0 15px;
+                height: 70px;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .hamburguesa {
+                display: flex;
+            }
+
+            .priv-nav-logo {
+                width: 100px;
+                height: 100%;
+                justify-content: flex-start;
+            }
+
+            .priv-nav-logo img {
+                width: 80px;
+            }
+
+            /* Menú desplegable */
+            .nav-links {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                flex-direction: column;
+                gap: 0;
+                background: rgba(5, 5, 5, 0.98);
+                border-bottom: 2px solid var(--gold-primary);
+                max-height: 0;
+                overflow: hidden;
+                visibility: hidden;
+                transition: max-height 0.4s ease, visibility 0.4s ease;
+            }
+
+            .nav-links.abierto {
+                max-height: 420px;
+                visibility: visible;
+                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.8);
+            }
+
+            .nav-links li {
+                border-top: 1px solid rgba(212, 175, 55, 0.15);
+            }
+
+            .nav-links a {
+                display: block;
+                padding: 17px 20px;
+                font-size: 13px;
+                letter-spacing: 3px;
+                text-align: center;
+            }
+
+            .nav-links a::after {
+                display: none;
+            }
+
+            .nav-links a {
+                font-size: 8px;
+                letter-spacing: 1px;
+            }
+
+            .hero {
+                padding-top: 120px; /* Evita que el hero quede tapado por la barra del menú */
+            }
+
+            #vista-ventas {
+                padding: 110px 0 80px; /* Espacio por la barra del menú y sin doble margen lateral */
+            }
+
+            .hero-logo { width: 140px; }
+            .nosotros { grid-template-columns: 1fr; text-align: center; gap: 40px; }
+            .carrusel-container { border-left: none; border-top: 3px solid var(--gold-primary); border-radius: 0 0 12px 12px; padding: 25px 20px; }
+            .nosotros-logo img { width: 200px; }
+            .memes-grid, .colecciones, .portafolio, .redes-sociales, .ventas-grid { grid-template-columns: 1fr; }
+            .section { padding: 80px 5%; }
+            .modal-content {
+                grid-template-columns: 1fr;
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+            .modal-img-box img {
+                height: 250px;
+                min-height: auto;
+            }
+            .carrito-flotante {
+                right: 15px;
+                bottom: 15px;
+                width: 56px;
+                height: 56px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    
+    <!-- 1. INTRO LOADER -->
+    <div class="intro">
+        <div class="intro-glow"></div>
+        <img src="IMAGENES PRIV/LOGO FINAL FINALISIMO.png" class="intro-logo" alt="Logo PRIV">
+        <div class="intro-line"></div>
+        <p class="intro-text">HECHO PARA DESTACAR</p>
+    </div>
+
+    <!-- 2. NAVEGACIÓN -->
+    <nav>
+        <button onclick="irAlInicio()" class="priv-nav-logo">
+            <img src="IMAGENES/letras blanco y negro-01.png" alt="PRIV">
+        </button>
+        <ul class="nav-links">
+            <li><a href="#inicio" onclick="cerrarColeccion()">INICIO</a></li>
+            <li><a href="#nosotros" onclick="cerrarColeccion()">NOSOTROS</a></li>
+            <li><a href="#Los Favoritos" onclick="cerrarColeccion()">LOS FAVORITOS</a></li>
+            <li><a href="#colecciones" onclick="cerrarColeccion()">COLECCIONES</a></li>
+            <li><a href="#priverse" onclick="cerrarColeccion()">PRIVERSE</a></li>
+            <li><a href="#contacto" onclick="cerrarColeccion()">CONTACTO</a></li>
+        </ul>
+        <button class="hamburguesa" id="btnHamburguesa" onclick="toggleMenu()" aria-label="Abrir menú" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- CONTENEDOR PRINCIPAL DE LA WEB -->
+    <div id="sitio-principal">
+
+        <!-- 3. INICIO / HERO -->
+        <section id="inicio" class="hero">
+            <img src="IMAGENES PRIV/LOGO FINAL FINALISIMO.png" class="hero-logo" alt="Logo PRIV">
+            <h1>HECHO PARA <span>DESTACAR</span></h1>
+            <p>BIENVENIDO AL UNIVERSO PRIV</p>
+        </section>
+
+        <!-- 4. NOSOTROS (MISIÓN Y VISIÓN) -->
+        <div id="nosotros-wrapper">
+            <section id="nosotros" class="section">
+                <h2 class="titulo">NOSOTROS</h2>
+                <p class="subtitulo">¿Quienes somos?</p>
+                <div class="nosotros">
+                    <div class="nosotros-logo">
+                        <img src="IMAGENES/logo FINAL LOBO NEGRO.png" alt="Logo PRIV">
+                    </div>
+
+                    <div class="carrusel-container">
+                        <div class="carrusel-track" id="carruselTrack">
+                            <!-- Misión -->
+                            <div class="carrusel-slide">
+                                <span>MISIÓN PRIV</span>
+                                <h2>NO VENIMOS A ENCAJAR.</h2>
+                                <p>Diseñar y ofrecer ropa urbana accesible y de calidad que permita a las personas expresar su estilo e identidad. 
+                                Priv busca crear prendas modernas y versátiles, conectando con la cultura street y brindando confianza a quienes la usan.</p>
+                            </div>
+                            <!-- Visión -->
+                            <div class="carrusel-slide">
+                                <span>VISIÓN PRIV</span>
+                                <h2>EL FUTURO DEL ESTILO URBANO.</h2>
+                                <p>Consolidar a Priv como una marca de ropa urbana reconocida a nivel local, creciendo de manera constante y sostenible.
+                                 Aspiramos a expandir nuestra presencia, fortalecer nuestra comunidad y destacar por autenticidad, buen diseño y cercanía con los clientes.</p>
+                            </div>
+                        </div>
+
+                        <div class="carrusel-controles">
+                            <button class="carrusel-btn" id="prevBtn">&#8249;</button>
+                            <div class="carrusel-dots" id="carruselDots">
+                                <span class="dot active" data-index="0"></span>
+                                <span class="dot" data-index="1"></span>
+                            </div>
+                            <button class="carrusel-btn" id="nextBtn">&#8250;</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- 5. PORTAFOLIO (LOS FAVORITOS) -->
+        <div id="Los Favoritos-wrapper">
+            <section id="Los Favoritos" class="section">
+                <h2 class="titulo">LOS FAVORITOS</h2>
+                <p class="subtitulo">MOST WANTED.</p>
+                <div class="portafolio" id="favoritosGrid"></div>
+            </section>
+        </div>
+
+        <!-- 6. COLECCIONES -->
+        <div id="colecciones-wrapper">
+            <section id="colecciones" class="section">
+                <h2 class="titulo">COLECCIONES</h2>
+                <p class="subtitulo">PIEZAS QUE REPRESENTAN LA ACTITUD PRIV.</p>
+                <div class="colecciones">
+                    <!-- Colección 1 -->
+                    <button class="coleccion" onclick="abrirColeccion(1)">
+                        <img src="CATALOGO TVAG/PORTADA TVAG.jpeg" alt="Colección PRIV 01">
+                        <div class="coleccion-texto"><h3>PRIV/TVAG</h3></div>
+                    </button>
+                    <!-- Colección 2 -->
+                    <button class="coleccion" onclick="abrirColeccion(2)">
+                        <img src="CATALOGO LALP/PORTADA LALP.jpeg" alt="Colección PRIV 02">
+                        <div class="coleccion-texto"><h3>PRIV/LALP</h3></div>
+                    </button>
+                    <!-- Colección 3 -->
+                    <button class="coleccion" onclick="abrirColeccion(3)">
+                        <img src="CATALOGO SGA/PORTADA SGA.jpeg" alt="Colección PRIV 03">
+                        <div class="coleccion-texto"><h3>PRIV/SGA</h3></div>
+                    </button>
+                </div>
+            </section>
+        </div>
+
+        <!-- 7. PRIVERSE -->
+        <div id="priverse-wrapper">
+            <section id="priverse" class="section">
+                <h2 class="titulo">PRIVERSE</h2>
+                <p class="subtitulo">Porque no todo en PRIV tiene que ser serio.</p>
+                <div class="memes-grid">
+                    <div class="meme-card">
+                        <img src="IMAGENES/valentina.jpeg" alt="Meme PRIV">
+                        <div class="meme-info">
+                            <span>Necesito hablar con el jefe</span>
+                            <h3>la jefa</h3>
+                        </div>
+                    </div>
+                    <div class="meme-card">
+                        <img src="IMAGENES/estefania.jpeg" alt="Meme PRIV">
+                        <div class="meme-info">
+                            <span>nuestros diseñadores</span>
+                            <h3>El estilo habla antes que tú.</h3>
+                        </div>
+                    </div>
+                    <div class="meme-card">
+                        <img src="IMAGENES/toji.jpeg" alt="Meme PRIV">
+                        <div class="meme-info">
+                            <span>PRIV CULTURE</span>
+                            <h3>Hecho para destacar.</h3>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- 8. CONTACTO -->
+        <div id="contacto-wrapper">
+            <section id="contacto" class="contacto">
+                <h2>ÚNETE A <span>PRIV</span></h2>
+                <p>Una marca urbana para quienes no quieren pasar desapercibidos.</p>
+                <p>HECHOS PARA DESTACAR</p>
+
+                <div class="redes-sociales">
+                    <a href="https://www.instagram.com/priv_clothes?stkn=Z29iYTI4c2V1ZDJw" target="_blank" class="red-card">
+                        <div class="red-icon-box"><img src="IMAGENES PRIV/PRIV INSTA.png" alt="Instagram"></div>
+                        <h3>INSTAGRAM</h3>
+                        <span>priv_clothes</span>
+                    </a>
+                    <a href="https://www.tiktok.com/@priv.clothes05?_r=1&_t=ZS-9ANAev2ezou" target="_blank" class="red-card">
+                        <div class="red-icon-box"><img src="IMAGENES PRIV/PRIV TIK TOK.png" alt="TikTok"></div>
+                        <h3>TIKTOK</h3>
+                        <span>PRIV CLOTHING</span>
+                    </a>
+                    <a href="https://www.facebook.com/share/19iQGiv39B/" target="_blank" class="red-card">
+                        <div class="red-icon-box"><img src="IMAGENES PRIV/PRIV FACEBOOK.png" alt="Facebook"></div>
+                        <h3>FACEBOOK</h3>
+                        <span>Priv Clothin</span>
+                    </a>
+                </div>
+
+                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=privclothing05@gmail.com" target="_blank" class="boton">CONTACTAR POR CORREO</a>
+            </section>
+        </div>
+
+        <!-- 9. FOOTER -->
+        <footer>
+            PRIV © 2026<br><br>HECHO PARA DESTACAR
+        </footer>
+
+    </div> <!-- FIN SITIO PRINCIPAL -->
+
+
+    <!-- VISTA DE CATÁLOGO / PORTAFOLIO DE CADA COLECCIÓN -->
+    <div id="vista-ventas">
+        <div class="section" style="padding-top: 20px;">
+            <div class="ventas-header">
+                <div>
+                    <span id="ventas-subtitulo" style="color: var(--gold-primary); letter-spacing: 4px; font-size: 13px; font-weight: 700; font-family: 'Rockwell', serif;">CATÁLOGO EXCLUSIVO</span>
+                    <h2 id="ventas-titulo" class="titulo" style="text-align: left; margin: 5px 0 0;">COLECCIÓN PRIV</h2>
+                </div>
+                <button class="btn-volver" onclick="cerrarColeccion(true)">&#8592; VOLVER A COLECCIONES</button>
+            </div>
+
+            <p id="ventas-descripcion" style="color: #bbb; max-width: 800px; line-height: 1.8; margin-bottom: 40px; font-size: 16px;">
+                Explora las piezas oficiales de esta serie limitada, diseñadas para destacar en la calle con total autenticidad.
+            </p>
+
+            <div class="ventas-grid" id="ventasGridContainer"></div>
+        </div>
+    </div>
+
+
+    <!-- VENTANA FLOTANTE (MODAL) PARA PRODUCTOS (COLECCIONES Y FAVORITOS) CON SELECCIÓN DE PAGO -->
+    <div class="modal-overlay" id="modalProducto" onclick="cerrarModalProdFuera(event)">
+        <div class="modal-content">
+            <button class="modal-cerrar" onclick="cerrarModalProducto()">&times;</button>
+            <div class="modal-img-box">
+                <img id="prodModalImg" src="" alt="Pieza PRIV">
+            </div>
+            <div class="modal-info-box">
+                <div>
+                    <span id="prodModalTag">STOCK LIMITADO</span>
+                    <h3 id="prodModalTitulo">Título</h3>
+                    <p id="prodModalDesc">Descripción...</p>
+                    <div id="prodModalPrecio" class="producto-precio" style="margin-bottom: 15px;">$0 COP</div>
+                </div>
+
+                <div>
+                    <!-- Agregar al carrito -->
+                    <button class="btn-secundario" style="margin-bottom: 15px;" onclick="agregarDesdeModal()">AGREGAR AL CARRITO</button>
+
+                    <!-- Selector de Método de Pago -->
+                    <div class="pago-selector">
+                        <label for="metodoPago">MÉTODO DE PAGO:</label>
+                        <select id="metodoPago" onchange="actualizarEnlacePago()">
+                            <option value="pse">PSE (Pagos Seguros en Línea)</option>
+                            <option value="nequi">Nequi</option>
+                            <option value="bancolombia">Bancolombia</option>
+                        </select>
+                    </div>
+
+                    <a id="prodModalBtnComprar" href="#" target="_blank" class="btn-comprar">PAGAR AHORA</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ============ CARRITO DE COMPRAS ============ -->
+    <button class="carrito-flotante" id="btnCarrito" onclick="abrirCarrito()" aria-label="Abrir carrito de compras">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="21" r="1.5"></circle>
+            <circle cx="19" cy="21" r="1.5"></circle>
+            <path d="M2 3h3l2.7 12.4a2 2 0 0 0 2 1.6h8.6a2 2 0 0 0 2-1.5L22 7H6"></path>
+        </svg>
+        <span class="carrito-contador" id="carritoContador">0</span>
+    </button>
+
+    <div class="carrito-overlay" id="carritoOverlay" onclick="cerrarCarrito()"></div>
+
+    <aside class="carrito-panel" id="carritoPanel" aria-label="Carrito de compras">
+        <div class="carrito-header">
+            <h2>TU CARRITO</h2>
+            <button onclick="cerrarCarrito()" aria-label="Cerrar carrito">&times;</button>
+        </div>
+
+        <div class="carrito-items" id="carritoItems"></div>
+
+        <div class="carrito-footer" id="carritoFooter">
+            <div class="carrito-total">
+                <span>TOTAL</span>
+                <strong id="carritoTotal">$0 COP</strong>
+            </div>
+
+            <div class="pago-selector">
+                <label for="carritoMetodoPago">MÉTODO DE PAGO:</label>
+                <select id="carritoMetodoPago" onchange="actualizarBotonCarrito()">
+                    <option value="pse">PSE (Pagos Seguros en Línea)</option>
+                    <option value="nequi">Nequi</option>
+                    <option value="bancolombia">Bancolombia</option>
+                </select>
+            </div>
+
+            <div class="acciones-card">
+                <button class="btn-comprar" id="btnFinalizarCompra" onclick="finalizarCompra()">FINALIZAR COMPRA</button>
+                <button class="btn-secundario" onclick="enviarPedidoCorreo()">ENVIAR PEDIDO POR CORREO</button>
+            </div>
+            <button class="btn-vaciar" onclick="vaciarCarrito()">VACIAR CARRITO</button>
+            <p class="carrito-nota" id="carritoNota"></p>
+        </div>
+    </aside>
+
+    <div class="toast-carrito" id="toastCarrito"></div>
+
+
+    <script>
+        // Carrusel
+        const slides = Array.from(document.querySelectorAll('.carrusel-slide'));
+        const nextBtn = document.getElementById('nextBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const dots = Array.from(document.querySelectorAll('.dot'));
+
+        let currentIndex = 0;
+
+        function updateCarrusel(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+            });
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+            currentIndex = index;
+        }
+
+        updateCarrusel(0);
+
+        nextBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % slides.length;
+            updateCarrusel(currentIndex);
+        });
+
+        prevBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+            updateCarrusel(currentIndex);
+        });
+
+        dots.forEach((dot, i) => {
+            dot.addEventListener('click', () => {
+                updateCarrusel(i);
+            });
+        });
+
+        // Datos de Colecciones (con los 6 productos cada una)
+        const datosColecciones = {
+            1: {
+                titulo: "PRIV/TVAG",
+                subtitulo: "LÍNEA MEN URBANA",
+                descripcion: "Diseñada para romper esquemas. La colección combina texturas limpias con una actitud nocturna y desenfadada, perfecta para quienes exigen máxima presencia en el asfalto.",
+                bgColor: "var(--bg-ventas-1)",
+                productos: [
+                    { img: "CATALOGO TVAG/TVAG 1.jpeg", nombre: "Daily street", desc: "Buso estilo hoodie en tono crema/beige claro con horma holgada (oversize). Ideal para tardes frescas o salidas de fin de semana con parche bordado discreto y bolsillo canguro.", precio: "$120.000 COP" },
+                    { img: "CATALOGO TVAG/TVAG2.jpeg", nombre: "Grey vision", desc: "Buso gris rata lavado de tela pesada con capucha amplia, acompañado de un pantalón cargo beige suelto de tiro medio/alto. Un outfit urbano sobrio y cómodo para andar por la ciudad.", precio: "$155.000 COP" },
+                    { img: "CATALOGO TVAG/TVAG3.jpeg", nombre: "Olive motion", desc: "Camiseta oversize en verde olivo/militar con gráfico sutil en el pecho, combinada con un pantalón estilo skater holgado. Perfecta para el clima cálido de Ibagué.", precio: "$85.000 COP" },
+                    { img: "CATALOGO TVAG/TVAG4.jpeg", nombre: "Dark street", desc: "jean cargo gris ácido de bota ancha. Actitud nocturna y relajada.", precio: "$150.000 COP" },
+                    { img: "CATALOGO TVAG/TVAG5.jpeg", nombre: "Classic mood", desc: "Polo casual en tejido de punto negro con textura y corte semientallado", precio: "$90.000 COP" },
+                    { img: "CATALOGO TVAG/TVAG6.jpeg", nombre: "Neutral flow", desc: "Camiseta básica oversize en gris desgastado/grafito, Un look fresco, versátil y minimalista para el día a día", precio: "$85.000 COP" }
+                ]
+            },
+            2: {
+                titulo: "PRIV / LALP",
+                subtitulo: "MAN AND WOMAN",
+                descripcion: "Oscuridad, poder y elegancia underground. Cada prenda de la colección está pensada para integrarse con las sombras de la ciudad y destacar con fuerza propia.",
+                bgColor: "var(--bg-ventas-2)",
+                productos: [
+                    { img: "CATALOGO LALP/LALP1.jpeg", nombre: "Duo black PRIV", desc: "Set de hoodies negros con el sello exclusivo PRIV en tono dorado en la espalda. Confección holgada y abrigada para destacar en cualquier parche urbano.", precio: "$280.000 COP" },
+                    { img: "CATALOGO LALP/LALP2.jpeg", nombre: "Oversize white PRIV", desc: "Camiseta blanca de corte amplio oversize con estampado frontal de alta definición del lobo PRIV. Perfecta, fresca y combinable para el clima de la región.", precio: "$95.000 COP" },
+                    { img: "CATALOGO LALP/LALP3.jpeg", nombre: "Duo black PRIV", desc: "Camiseta negra de corte urbano con sutiles detalles gráficos posteriores. Estilo total black esencial para la movida nocturna en la ciudad.", precio: "$170.000 COP" },
+                    { img: "CATALOGO LALP/LALP4.jpeg", nombre: "Blusa basica PRIV", desc: "Estilo relajado, moderno y cómodo para el día a día.", precio: "$65.000 COP" },
+                    { img: "CATALOGO LALP/LALP5.jpeg", nombre: "Falda cargo PRIV", desc: "Minifalda cargo urbana en tono oscuro con detalles de bolsillos laterales y tiras estéticas. Vanguardista y arriesgada para destacar de noche..", precio: "$120.000 COP" },
+                    { img: "CATALOGO LALP/LALP6.jpeg", nombre: "Oversize basico PRIV ", desc: "Camiseta verde olivo oversize minimalista", precio: "$75.000 COP" }
+                ]
+            },
+            3: {
+                titulo: "PRIV / SGA",
+                subtitulo: "ALTA COSTURA STREET",
+                descripcion: "La máxima expresión del colectivo PRIV. Un encuentro visual de siluetas audaces diseñadas para creadores de tendencias que mandan en la calle.",
+                bgColor: "var(--bg-ventas-3)",
+                productos: [
+                    { img: "CATALOGO SGA/SGA 1.jpeg", nombre: "Saco corto PRIV ", desc: "Saco crop con capucha de horma ajustada,un estilo arriesgado y muy actual.", precio: "$155.000 COP" },
+                    { img: "CATALOGO SGA/SGA 2.jpeg", nombre: "Top blanco PRIV", desc: "Top corto en tono blanco con detalles sutiles de la marca,fresco y llamativo para la calle.", precio: "$90.000 COP" },
+                    { img: "CATALOGO SGA/SGA3.jpeg", nombre: "Body black and white PRIV", desc: "Body ajustado con diseño bicolor de alta costura,Presencia imponente para la noche.", precio: "$90.000 COP" },
+                    { img: "CATALOGO SGA/SGA4.jpeg", nombre: "Camiseta basica", desc: "Camiseta estilo oversize en tono verde oliva con tipografía sutil en el pecho,Comodidad total para el uso diario.", precio: "$90.000 COP" },
+                    { img: "CATALOGO SGA/SGA5.jpeg", nombre: "Pantalon cargo PRIV", desc: "Pantalón cargo en mezclilla oscura con bolsillos laterales funcionales y rotos definidos. Estilo urbano puro.", precio: "$155.000 COP" },
+                    { img: "CATALOGO SGA/SGA6.jpeg", nombre: "Saco blanco premium", desc: "Saco blanco con cuello alto y cremallera corta, Un look limpio, abrigado y con mucha clase.", precio: "$140.000 COP" }
+                ]
+            }
+        };
+
+        // Datos para los Favoritos (Modal)
+        const datosFavoritos = [
+            {
+                img: "LOS FAVORITOS/LALP.jpeg",
+                tag: "MOST WANTED",
+                titulo: "Saco con cremallera a la mitad",
+                desc: "El saco de PRIV es una prenda urbana de color negro, con cuello alto y cierre frontal. En la parte delantera tiene el logo de la marca en color blanco, mientras que en la parte trasera destaca un diseño de un lobo dentro de un círculo, acompañado del nombre PRIV. Su estilo es moderno, cómodo y minimalista, ideal para quienes buscan vestir con personalidad y destacar.",
+                link: "https://www.pse.com.co/persona"
+            },
+            {
+                img: "LOS FAVORITOS/DACC.jpeg",
+                tag: "MOST WANTED",
+                titulo: " Hoodie blanco oversized",
+                desc: "Hoodie blanca oversized, confeccionada en un estilo urbano y minimalista, con capucha, bolsillo frontal tipo canguro y logo PRIV de lobo en negro en el pecho. Combina comodidad, estilo y versatilidad.",
+                link: "https://www.pse.com.co/persona"
+            },
+            {
+                img: "LOS FAVORITOS/JJF.jpeg",
+                tag: "MOST WANTED",
+                titulo: "hoodie de corte oversized",
+                desc: "Presenta en el frente un gráfico circular llamativo con la silueta de un lobo en blanco y la tipografía estilo graffiti, aportando una estética moderna y audaz.",
+                link: "https://www.pse.com.co/persona"
+            },
+            {
+                img: "LOS FAVORITOS/TAVG.jpeg",
+                tag: "MOST WANTED",
+                titulo: "Minifalda de tiro alto",
+                desc: "Minifalda plisada de tiro alto en color azul claro, de estilo urbano y deportivo, con bolsillos laterales y el logotipo bordado  en la parte inferior.",
+                link: "https://www.pse.com.co/persona"
+            }
+        ];
+
+        // Los Favoritos se manejan como una colección más (id 4) para reutilizar carrito y modal de pago.
+        // PRECIOS: ajústalos aquí cuando quieras (uno por cada favorito, en el mismo orden).
+        const preciosFavoritos = ["$140.000 COP", "$120.000 COP", "$120.000 COP", "$120.000 COP"];
+
+        datosColecciones[4] = {
+            titulo: "LOS FAVORITOS",
+            subtitulo: "MOST WANTED",
+            descripcion: "",
+            bgColor: "var(--bg-portafolio)",
+            productos: datosFavoritos.map((f, i) => {
+                const nombre = f.titulo.trim();
+                return {
+                    img: f.img,
+                    nombre: nombre.charAt(0).toUpperCase() + nombre.slice(1),
+                    desc: f.desc,
+                    precio: preciosFavoritos[i],
+                    tag: f.tag
+                };
+            })
+        };
+
+        function renderFavoritos() {
+            const grid = document.getElementById('favoritosGrid');
+            grid.innerHTML = '';
+            datosColecciones[4].productos.forEach((prod, index) => {
+                const card = document.createElement('div');
+                card.className = 'producto-venta-card';
+                card.innerHTML = `
+                    <img src="${prod.img}" alt="${prod.nombre}" style="cursor: pointer;" onclick="abrirModalProducto(4, ${index})">
+                    <div class="producto-venta-info">
+                        <div>
+                            <span>${prod.tag}</span>
+                            <h3 style="cursor: pointer;" onclick="abrirModalProducto(4, ${index})">${prod.nombre}</h3>
+                            <p class="producto-desc">${prod.desc}</p>
+                        </div>
+                        <div>
+                            <div class="producto-precio">${prod.precio}</div>
+                            <div class="acciones-card">
+                                <button class="btn-comprar" onclick="agregarAlCarrito(4, ${index})">AGREGAR AL CARRITO</button>
+                                <button class="btn-secundario" onclick="abrirModalProducto(4, ${index})">VER DETALLES Y PAGO</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        renderFavoritos();
+
+        function abrirColeccion(id) {
+            const coleccion = datosColecciones[id];
+            if (!coleccion) return;
+
+            document.getElementById('ventas-titulo').innerText = coleccion.titulo;
+            document.getElementById('ventas-subtitulo').innerText = coleccion.subtitulo;
+            document.getElementById('ventas-descripcion').innerText = coleccion.descripcion;
+            
+            const vistaVentas = document.getElementById('vista-ventas');
+            vistaVentas.style.background = coleccion.bgColor;
+
+            const container = document.getElementById('ventasGridContainer');
+            container.innerHTML = '';
+
+            coleccion.productos.forEach((prod, index) => {
+                const card = document.createElement('div');
+                card.className = 'producto-venta-card';
+                card.innerHTML = `
+                    <img src="${prod.img}" alt="${prod.nombre}" style="cursor: pointer;" onclick="abrirModalProducto(${id}, ${index})">
+                    <div class="producto-venta-info">
+                        <div>
+                            <span>STOCK LIMITADO</span>
+                            <h3 style="cursor: pointer;" onclick="abrirModalProducto(${id}, ${index})">${prod.nombre}</h3>
+                            <p class="producto-desc">${prod.desc}</p>
+                        </div>
+                        <div>
+                            <div class="producto-precio">${prod.precio}</div>
+                            <div class="acciones-card">
+                                <button class="btn-comprar" onclick="agregarAlCarrito(${id}, ${index})">AGREGAR AL CARRITO</button>
+                                <button class="btn-secundario" onclick="abrirModalProducto(${id}, ${index})">VER DETALLES Y PAGO</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            document.getElementById('sitio-principal').style.display = 'none';
+            vistaVentas.style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Cierra el catálogo y muestra el sitio principal.
+        // Solo se desplaza a COLECCIONES si se pide explícitamente (botón "Volver a colecciones");
+        // los enlaces del menú dejan que el ancla (#inicio, #nosotros...) haga su trabajo.
+        function cerrarColeccion(irAColecciones) {
+            document.getElementById('vista-ventas').style.display = 'none';
+            document.getElementById('sitio-principal').style.display = 'block';
+            if (irAColecciones === true) {
+                window.scrollTo({ top: document.getElementById('colecciones').offsetTop - 50, behavior: 'smooth' });
+            }
+        }
+
+        function irAlInicio() {
+            cerrarColeccion();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // --- MODAL DE PRODUCTO (COLECCIONES Y FAVORITOS) CON MÉTODOS DE PAGO ---
+        let productoActualGlobal = null;
+        let productoActualRef = null; // { colId, prodIndex }
+
+        function abrirModalProducto(colId, prodIndex) {
+            const prod = datosColecciones[colId].productos[prodIndex];
+            if (!prod) return;
+
+            productoActualGlobal = prod;
+            productoActualRef = { colId, prodIndex };
+
+            document.getElementById('prodModalImg').src = prod.img;
+            document.getElementById('prodModalTag').innerText = prod.tag || 'STOCK LIMITADO';
+            document.getElementById('prodModalTitulo').innerText = prod.nombre;
+            document.getElementById('prodModalDesc').innerText = prod.desc;
+            document.getElementById('prodModalPrecio').innerText = prod.precio;
+
+            // Reiniciar selector a PSE por defecto
+            document.getElementById('metodoPago').value = 'pse';
+            actualizarEnlacePago();
+
+            document.getElementById('modalProducto').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function cerrarModalProducto() {
+            document.getElementById('modalProducto').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function cerrarModalProdFuera(event) {
+            if (event.target.id === 'modalProducto') {
+                cerrarModalProducto();
+            }
+        }
+
+        function agregarDesdeModal() {
+            if (!productoActualRef) return;
+            agregarAlCarrito(productoActualRef.colId, productoActualRef.prodIndex);
+        }
+
+        function actualizarEnlacePago() {
+            const metodo = document.getElementById('metodoPago').value;
+            const btnComprar = document.getElementById('prodModalBtnComprar');
+            const nombreProd = productoActualGlobal ? productoActualGlobal.nombre : 'Prenda PRIV';
+            const precioProd = productoActualGlobal ? productoActualGlobal.precio : '';
+
+            if (metodo === 'pse') {
+                btnComprar.innerText = "PAGAR SEGURO CON PSE";
+                btnComprar.href = "https://www.pse.com.co/";
+            } else if (metodo === 'nequi') {
+                btnComprar.innerText = "CONFIRMAR PAGO POR NEQUI";
+                btnComprar.href = `https://mail.google.com/mail/?view=cm&fs=1&to=privclothing05@gmail.com&su=Pago%20por%20Nequi%20-%20${encodeURIComponent(nombreProd)}&body=Hola,%20deseo%20adquirir%20la%20pieza:%20${encodeURIComponent(nombreProd)}%20(${precioProd})%20pagando%20por%20Nequi.%20Adjunto%20mi%20comprobante.`;
+            } else if (metodo === 'bancolombia') {
+                btnComprar.innerText = "CONFIRMAR PAGO BANCOLOMBIA";
+                btnComprar.href = `https://mail.google.com/mail/?view=cm&fs=1&to=privclothing05@gmail.com&su=Pago%20por%20Bancolombia%20-%20${encodeURIComponent(nombreProd)}&body=Hola,%20deseo%20adquirir%20la%20pieza:%20${encodeURIComponent(nombreProd)}%20(${precioProd})%20pagando%20por%20Bancolombia.%20Adjunto%20mi%20comprobante.`;
+            }
+        }
+
+        // =========================================
+        // CARRITO DE COMPRAS
+        // =========================================
+        const CORREO_TIENDA = 'privclothing05@gmail.com';
+        const CLAVE_CARRITO = 'privCarrito';
+        let carrito = [];
+
+        // Cargar carrito guardado (si existe)
+        try {
+            const guardado = JSON.parse(localStorage.getItem(CLAVE_CARRITO));
+            if (Array.isArray(guardado)) carrito = guardado;
+        } catch (e) {
+            carrito = [];
+        }
+
+        function guardarCarrito() {
+            try { localStorage.setItem(CLAVE_CARRITO, JSON.stringify(carrito)); } catch (e) {}
+        }
+
+        // "$120.000 COP" -> 120000
+        function precioANumero(texto) {
+            return parseInt(String(texto).replace(/\D/g, ''), 10) || 0;
+        }
+
+        // 120000 -> "$120.000 COP"
+        function formatoCOP(numero) {
+            return '$' + numero.toLocaleString('es-CO') + ' COP';
+        }
+
+        function agregarAlCarrito(colId, prodIndex) {
+            const col = datosColecciones[colId];
+            const prod = col && col.productos[prodIndex];
+            if (!prod) return;
+
+            const clave = colId + '-' + prodIndex;
+            const existente = carrito.find(i => i.clave === clave);
+
+            if (existente) {
+                existente.cantidad += 1;
+            } else {
+                carrito.push({
+                    clave: clave,
+                    nombre: prod.nombre.trim(),
+                    coleccion: col.titulo,
+                    img: prod.img,
+                    precio: precioANumero(prod.precio),
+                    cantidad: 1
+                });
+            }
+
+            guardarCarrito();
+            renderCarrito();
+            mostrarToast('<b>' + prod.nombre.trim() + '</b> agregado al carrito');
+
+            const btn = document.getElementById('btnCarrito');
+            btn.classList.remove('rebote');
+            void btn.offsetWidth; // reinicia la animación
+            btn.classList.add('rebote');
+        }
+
+        function cambiarCantidad(clave, delta) {
+            const item = carrito.find(i => i.clave === clave);
+            if (!item) return;
+            item.cantidad += delta;
+            if (item.cantidad <= 0) {
+                carrito = carrito.filter(i => i.clave !== clave);
+            }
+            guardarCarrito();
+            renderCarrito();
+        }
+
+        function quitarDelCarrito(clave) {
+            carrito = carrito.filter(i => i.clave !== clave);
+            guardarCarrito();
+            renderCarrito();
+        }
+
+        function vaciarCarrito() {
+            if (!carrito.length) return;
+            if (confirm('¿Seguro que quieres vaciar el carrito?')) {
+                carrito = [];
+                guardarCarrito();
+                renderCarrito();
+            }
+        }
+
+        function totalCarrito() {
+            return carrito.reduce((suma, i) => suma + i.precio * i.cantidad, 0);
+        }
+
+        function cantidadTotal() {
+            return carrito.reduce((suma, i) => suma + i.cantidad, 0);
+        }
+
+        function renderCarrito() {
+            const cont = document.getElementById('carritoItems');
+            const footer = document.getElementById('carritoFooter');
+            const contador = document.getElementById('carritoContador');
+
+            contador.innerText = cantidadTotal();
+            contador.style.display = cantidadTotal() > 0 ? 'flex' : 'none';
+
+            if (!carrito.length) {
+                cont.innerHTML = '<p class="carrito-vacio">Tu carrito está vacío.<br>Explora las colecciones y elige tus piezas PRIV.</p>';
+                footer.style.display = 'none';
+                return;
+            }
+
+            footer.style.display = 'block';
+            cont.innerHTML = carrito.map(i => `
+                <div class="carrito-item">
+                    <img src="${i.img}" alt="${i.nombre}">
+                    <div class="carrito-item-info">
+                        <h4>${i.nombre}</h4>
+                        <small>${i.coleccion}</small>
+                        <div class="carrito-item-precio">${formatoCOP(i.precio * i.cantidad)}</div>
+                        <div class="carrito-cantidad">
+                            <button onclick="cambiarCantidad('${i.clave}', -1)" aria-label="Disminuir">&minus;</button>
+                            <span>${i.cantidad}</span>
+                            <button onclick="cambiarCantidad('${i.clave}', 1)" aria-label="Aumentar">+</button>
+                        </div>
+                    </div>
+                    <button class="carrito-quitar" onclick="quitarDelCarrito('${i.clave}')" aria-label="Quitar">&times;</button>
+                </div>
+            `).join('');
+
+            document.getElementById('carritoTotal').innerText = formatoCOP(totalCarrito());
+            actualizarBotonCarrito();
+        }
+
+        function actualizarBotonCarrito() {
+            const metodo = document.getElementById('carritoMetodoPago').value;
+            const btn = document.getElementById('btnFinalizarCompra');
+            const nota = document.getElementById('carritoNota');
+
+            if (metodo === 'pse') {
+                btn.innerText = 'PAGAR CON PSE';
+                nota.innerText = 'Se abrirá PSE en una nueva pestaña. Luego envíanos tu pedido por correo para confirmarlo.';
+            } else if (metodo === 'nequi') {
+                btn.innerText = 'CONFIRMAR PEDIDO POR NEQUI';
+                nota.innerText = 'Se abrirá un correo con tu pedido. Adjunta el comprobante de Nequi.';
+            } else {
+                btn.innerText = 'CONFIRMAR PEDIDO POR BANCOLOMBIA';
+                nota.innerText = 'Se abrirá un correo con tu pedido. Adjunta el comprobante de Bancolombia.';
+            }
+        }
+
+        function textoPedido(metodoTexto) {
+            const lineas = carrito.map(i =>
+                '- ' + i.nombre + ' (' + i.coleccion + ') x' + i.cantidad + ' = ' + formatoCOP(i.precio * i.cantidad)
+            ).join('\n');
+            return 'Hola, deseo realizar el siguiente pedido:\n\n' + lineas +
+                   '\n\nTOTAL: ' + formatoCOP(totalCarrito()) +
+                   '\nMétodo de pago: ' + metodoTexto +
+                   '\n\nNombre:\nDirección de envío:\nCiudad:\nTeléfono:\n\nGracias.';
+        }
+
+        function abrirCorreoPedido(asunto, cuerpo) {
+            const url = 'https://mail.google.com/mail/?view=cm&fs=1&to=' + CORREO_TIENDA +
+                        '&su=' + encodeURIComponent(asunto) +
+                        '&body=' + encodeURIComponent(cuerpo);
+            window.open(url, '_blank');
+        }
+
+        function nombreMetodo(valor) {
+            return { pse: 'PSE', nequi: 'Nequi', bancolombia: 'Bancolombia' }[valor] || valor;
+        }
+
+        function finalizarCompra() {
+            if (!carrito.length) return;
+            const metodo = document.getElementById('carritoMetodoPago').value;
+
+            if (metodo === 'pse') {
+                window.open('https://www.pse.com.co/', '_blank');
+            } else {
+                abrirCorreoPedido('Pedido PRIV - Pago por ' + nombreMetodo(metodo), textoPedido(nombreMetodo(metodo)));
+            }
+        }
+
+        function enviarPedidoCorreo() {
+            if (!carrito.length) return;
+            const metodo = document.getElementById('carritoMetodoPago').value;
+            abrirCorreoPedido('Pedido PRIV', textoPedido(nombreMetodo(metodo)));
+        }
+
+        function abrirCarrito() {
+            renderCarrito();
+            document.getElementById('carritoOverlay').classList.add('active');
+            document.getElementById('carritoPanel').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function cerrarCarrito() {
+            document.getElementById('carritoOverlay').classList.remove('active');
+            document.getElementById('carritoPanel').classList.remove('active');
+            // No restaurar el scroll si hay un modal de producto abierto
+            const hayModal = document.querySelector('.modal-overlay.active');
+            document.body.style.overflow = hayModal ? 'hidden' : 'auto';
+        }
+
+        let toastTimer = null;
+        function mostrarToast(html) {
+            const toast = document.getElementById('toastCarrito');
+            toast.innerHTML = html;
+            toast.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+        }
+
+        // Cerrar el carrito con la tecla Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') cerrarCarrito();
+        });
+
+        // Inicializar el carrito al cargar
+        renderCarrito();
+
+        // =========================================
+        // MENÚ HAMBURGUESA (MÓVIL)
+        // =========================================
+        function toggleMenu() {
+            const links = document.querySelector('.nav-links');
+            const btn = document.getElementById('btnHamburguesa');
+            const abierto = links.classList.toggle('abierto');
+            btn.classList.toggle('abierto', abierto);
+            btn.setAttribute('aria-expanded', abierto);
+        }
+
+        function cerrarMenu() {
+            document.querySelector('.nav-links').classList.remove('abierto');
+            const btn = document.getElementById('btnHamburguesa');
+            btn.classList.remove('abierto');
+            btn.setAttribute('aria-expanded', false);
+        }
+
+        // Cerrar el menú al elegir una opción, al tocar el logo o con Escape
+        document.querySelectorAll('.nav-links a').forEach(a => a.addEventListener('click', cerrarMenu));
+        document.querySelector('.priv-nav-logo').addEventListener('click', cerrarMenu);
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') cerrarMenu(); });
+
+        // Si la pantalla vuelve a ser grande, asegurar que el menú quede cerrado
+        window.addEventListener('resize', () => { if (window.innerWidth > 900) cerrarMenu(); });
+    </script>
+    
+</body>
+
+</html>
